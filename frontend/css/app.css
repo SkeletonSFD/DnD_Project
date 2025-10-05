@@ -1,0 +1,254 @@
+/* Стили для главной страницы приложения */
+
+.app-body {
+    background: linear-gradient(135deg, #1a1410 0%, #2d1f16 50%, #1a1410 100%);
+    min-height: 100vh;
+    padding: 0;
+    display: block;
+}
+
+.medieval-nav {
+    background: linear-gradient(to bottom, #8b5a2b 0%, #5d3a1a 100%);
+    border-bottom: 4px solid #d4af37;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+.parchment-panel {
+    background: linear-gradient(to bottom, #f4e8d0 0%, #e8d7b8 50%, #f4e8d0 100%);
+    box-shadow: 
+        0 0 30px rgba(0,0,0,0.3),
+        inset 0 0 50px rgba(139,90,43,0.1);
+    border-radius: 8px;
+    position: relative;
+}
+
+.parchment-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(139,90,43,0.03) 2px,
+            rgba(139,90,43,0.03) 4px
+        );
+    pointer-events: none;
+    border-radius: 8px;
+}
+
+.medieval-subtitle {
+    font-family: 'Cinzel', serif;
+    color: #5d3a1a;
+    text-shadow: 1px 1px 0px rgba(212,175,55,0.3);
+}
+
+.medieval-button-small {
+    background: linear-gradient(to bottom, #8b5a2b 0%, #5d3a1a 100%);
+    border: 2px solid #d4af37;
+    color: #f4e8d0;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.medieval-button-small:hover {
+    background: linear-gradient(to bottom, #a0692f 0%, #6d4422 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(212,175,55,0.4);
+}
+
+/* Комнаты */
+.room-item {
+    background: rgba(255,255,255,0.5);
+    border: 2px solid #8b5a2b;
+    border-radius: 6px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.room-item:hover {
+    background: rgba(255,255,255,0.7);
+    border-color: #d4af37;
+    transform: translateX(4px);
+}
+
+.room-item.active {
+    background: rgba(212,175,55,0.3);
+    border-color: #d4af37;
+    border-width: 3px;
+}
+
+.room-name {
+    font-family: 'Cinzel', serif;
+    color: #5d3a1a;
+    font-weight: 600;
+}
+
+.room-users {
+    font-size: 0.875rem;
+    color: #8b5a2b;
+}
+
+/* Пользователи онлайн */
+.user-item {
+    background: rgba(255,255,255,0.4);
+    border: 1px solid #8b5a2b;
+    border-radius: 4px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-status {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 8px #22c55e;
+}
+
+.user-name {
+    color: #5d3a1a;
+    font-weight: 500;
+}
+
+/* Сообщения */
+.message-item {
+    background: rgba(255,255,255,0.6);
+    border-left: 4px solid #8b5a2b;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 8px;
+}
+
+.message-item.own-message {
+    background: rgba(212,175,55,0.2);
+    border-left-color: #d4af37;
+}
+
+.message-item.system-message {
+    background: rgba(139,90,43,0.1);
+    border-left-color: #5d3a1a;
+    font-style: italic;
+    text-align: center;
+}
+
+.message-author {
+    font-family: 'Cinzel', serif;
+    color: #5d3a1a;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.message-time {
+    color: #8b5a2b;
+    font-size: 0.75rem;
+}
+
+.message-text {
+    color: #2d1f16;
+    margin-top: 4px;
+}
+
+/* Кубики */
+.dice-button {
+    background: linear-gradient(to bottom, #8b5a2b 0%, #5d3a1a 100%);
+    border: 2px solid #d4af37;
+    color: #f4e8d0;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.125rem;
+}
+
+.dice-button:hover {
+    background: linear-gradient(to bottom, #a0692f 0%, #6d4422 100%);
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(212,175,55,0.4);
+}
+
+.dice-button:active {
+    transform: scale(0.95);
+}
+
+/* Анимация броска кубика */
+@keyframes diceRoll {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(90deg); }
+    50% { transform: rotate(180deg); }
+    75% { transform: rotate(270deg); }
+}
+
+.dice-rolling {
+    animation: diceRoll 0.5s ease-in-out;
+}
+
+/* Скроллбар */
+#messagesArea::-webkit-scrollbar {
+    width: 8px;
+}
+
+#messagesArea::-webkit-scrollbar-track {
+    background: rgba(139,90,43,0.1);
+    border-radius: 4px;
+}
+
+#messagesArea::-webkit-scrollbar-thumb {
+    background: #8b5a2b;
+    border-radius: 4px;
+}
+
+#messagesArea::-webkit-scrollbar-thumb:hover {
+    background: #5d3a1a;
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .parchment-panel {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Индикатор подключения */
+.connection-status {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    z-index: 1000;
+}
+
+.connection-status.connected {
+    background: rgba(34, 197, 94, 0.9);
+    color: white;
+}
+
+.connection-status.disconnected {
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+}
+
+.connection-status.connecting {
+    background: rgba(251, 191, 36, 0.9);
+    color: #1a1410;
+}

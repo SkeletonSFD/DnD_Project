@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D Application - Главная</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body class="app-body">
+    <!-- Навигационная панель -->
+    <nav class="medieval-nav">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <svg class="w-10 h-10 shield-icon" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+                </svg>
+                <h1 class="medieval-title text-2xl">D&D Application</h1>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <div class="text-amber-100">
+                    <span class="text-sm">Добро пожаловать, </span>
+                    <span id="username" class="font-bold"></span>
+                </div>
+                <button onclick="logout()" class="medieval-button-small px-4 py-2 rounded">
+                    Выход
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Основной контент -->
+    <div class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Левая панель - Комнаты -->
+            <div class="lg:col-span-1">
+                <div class="parchment-panel p-6">
+                    <h2 class="medieval-subtitle text-2xl mb-4">🏰 Игровые комнаты</h2>
+                    
+                    <div class="mb-4">
+                        <input 
+                            type="text" 
+                            id="roomNameInput" 
+                            class="medieval-input w-full px-3 py-2 rounded mb-2" 
+                            placeholder="Название комнаты"
+                        >
+                        <button 
+                            onclick="createRoom()" 
+                            class="medieval-button w-full py-2 rounded text-sm"
+                        >
+                            Создать комнату
+                        </button>
+                    </div>
+                    
+                    <div id="roomsList" class="space-y-2">
+                        <!-- Список комнат будет здесь -->
+                    </div>
+                </div>
+                
+                <!-- Онлайн пользователи -->
+                <div class="parchment-panel p-6 mt-6">
+                    <h2 class="medieval-subtitle text-xl mb-4">👥 Онлайн</h2>
+                    <div id="onlineUsers" class="space-y-2">
+                        <!-- Список пользователей -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Центральная панель - Чат -->
+            <div class="lg:col-span-2">
+                <div class="parchment-panel p-6 h-[600px] flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="medieval-subtitle text-2xl">💬 Чат</h2>
+                        <div id="currentRoom" class="text-amber-900 font-semibold">
+                            Выберите комнату
+                        </div>
+                    </div>
+                    
+                    <!-- Область сообщений -->
+                    <div id="messagesArea" class="flex-1 overflow-y-auto mb-4 space-y-2 bg-amber-50 bg-opacity-50 rounded p-4">
+                        <div class="text-center text-amber-900 opacity-60">
+                            Выберите или создайте комнату для начала общения
+                        </div>
+                    </div>
+                    
+                    <!-- Форма отправки сообщения -->
+                    <form id="messageForm" class="flex space-x-2">
+                        <input 
+                            type="text" 
+                            id="messageInput" 
+                            class="medieval-input flex-1 px-4 py-2 rounded" 
+                            placeholder="Введите сообщение..."
+                            disabled
+                        >
+                        <button 
+                            type="submit" 
+                            class="medieval-button px-6 py-2 rounded"
+                            disabled
+                        >
+                            Отправить
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Панель бросков кубиков -->
+                <div class="parchment-panel p-6 mt-6">
+                    <h2 class="medieval-subtitle text-xl mb-4">🎲 Броски кубиков</h2>
+                    <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
+                        <button onclick="rollDice(4)" class="dice-button">d4</button>
+                        <button onclick="rollDice(6)" class="dice-button">d6</button>
+                        <button onclick="rollDice(8)" class="dice-button">d8</button>
+                        <button onclick="rollDice(10)" class="dice-button">d10</button>
+                        <button onclick="rollDice(12)" class="dice-button">d12</button>
+                        <button onclick="rollDice(20)" class="dice-button">d20</button>
+                    </div>
+                    <div id="diceResult" class="mt-4 text-center text-xl font-bold text-amber-900"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

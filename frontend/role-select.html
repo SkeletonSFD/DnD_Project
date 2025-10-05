@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D Application - Выбор роли</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="min-h-screen bg-gradient-to-b from-amber-900 via-stone-800 to-stone-900 flex items-center justify-center p-4">
+    <div class="w-full max-w-2xl">
+        <!-- Главный контейнер с пергаментным эффектом -->
+        <div class="bg-amber-50 border-8 border-amber-800 rounded-lg shadow-2xl p-8 relative">
+            <!-- Декоративные уголки -->
+            <div class="absolute top-0 left-0 w-16 h-16 border-t-4 border-l-4 border-amber-900 rounded-tl-lg"></div>
+            <div class="absolute top-0 right-0 w-16 h-16 border-t-4 border-r-4 border-amber-900 rounded-tr-lg"></div>
+            <div class="absolute bottom-0 left-0 w-16 h-16 border-b-4 border-l-4 border-amber-900 rounded-bl-lg"></div>
+            <div class="absolute bottom-0 right-0 w-16 h-16 border-b-4 border-r-4 border-amber-900 rounded-br-lg"></div>
+
+            <!-- Заголовок -->
+            <h1 class="text-5xl font-bold text-center text-amber-900 mb-8 tracking-wide" style="font-family: 'Cinzel', serif;">
+                ⚔️ Добро пожаловать ⚔️
+            </h1>
+
+            <!-- Блок выбора роли -->
+            <div id="roleSelection" class="space-y-6">
+                <h2 class="text-2xl font-semibold text-center text-stone-800 mb-6" style="font-family: 'Cinzel', serif;">
+                    Выберите свою роль
+                </h2>
+                
+                <div class="flex flex-col gap-4">
+                    <!-- Кнопка "Мастер" -->
+                    <button
+                        onclick="selectRole('master')"
+                        class="bg-gradient-to-r from-red-800 to-red-900 text-amber-50 font-bold text-xl py-4 px-8 rounded-lg border-4 border-red-950 shadow-lg hover:from-red-700 hover:to-red-800 hover:scale-105 transform transition-all duration-200 hover:shadow-2xl"
+                        style="font-family: 'Cinzel', serif;"
+                    >
+                        🎭 Мастер
+                    </button>
+
+                    <!-- Кнопка "Игрок" -->
+                    <button
+                        onclick="selectRole('player')"
+                        class="bg-gradient-to-r from-blue-800 to-blue-900 text-amber-50 font-bold text-xl py-4 px-8 rounded-lg border-4 border-blue-950 shadow-lg hover:from-blue-700 hover:to-blue-800 hover:scale-105 transform transition-all duration-200 hover:shadow-2xl"
+                        style="font-family: 'Cinzel', serif;"
+                    >
+                        🗡️ Игрок
+                    </button>
+                </div>
+            </div>
+
+            <!-- Блок для роли "Мастер" -->
+            <div id="masterPanel" class="space-y-6 hidden">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-semibold text-stone-800" style="font-family: 'Cinzel', serif;">
+                        Роль: 🎭 Мастер
+                    </h2>
+                    <button
+                        onclick="backToRoleSelection()"
+                        class="text-stone-600 hover:text-stone-900 font-semibold underline"
+                    >
+                        Назад
+                    </button>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <button
+                        onclick="continueStory()"
+                        class="bg-gradient-to-r from-green-700 to-green-800 text-amber-50 font-semibold text-lg py-3 px-6 rounded-lg border-4 border-green-900 shadow-lg hover:from-green-600 hover:to-green-700 hover:scale-105 transform transition-all duration-200"
+                        style="font-family: 'Cinzel', serif;"
+                    >
+                        📖 Продолжить историю
+                    </button>
+
+                    <button
+                        onclick="newStory()"
+                        class="bg-gradient-to-r from-purple-700 to-purple-800 text-amber-50 font-semibold text-lg py-3 px-6 rounded-lg border-4 border-purple-900 shadow-lg hover:from-purple-600 hover:to-purple-700 hover:scale-105 transform transition-all duration-200"
+                        style="font-family: 'Cinzel', serif;"
+                    >
+                        ✨ Начать новую историю
+                    </button>
+                </div>
+
+                <!-- Заглушка "Код сгенерирован!" -->
+                <div id="codeGenerated" class="mt-6 bg-amber-200 border-4 border-amber-600 rounded-lg p-4 text-center hidden">
+                    <p class="text-xl font-bold text-amber-900" style="font-family: 'Cinzel', serif;">
+                        ✅ Код комнаты: <span id="roomCode" class="text-2xl">ABC123</span>
+                    </p>
+                    <button
+                        onclick="enterGame()"
+                        class="mt-4 bg-gradient-to-r from-amber-700 to-amber-800 text-amber-50 font-semibold text-lg py-2 px-6 rounded-lg border-4 border-amber-900 shadow-lg hover:from-amber-600 hover:to-amber-700"
+                        style="font-family: 'Cinzel', serif;"
+                    >
+                        Войти в игру
+                    </button>
+                </div>
+            </div>
+
+            <!-- Блок для роли "Игрок" -->
+            <div id="playerPanel" class="space-y-6 hidden">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-semibold text-stone-800" style="font-family: 'Cinzel', serif;">
+                        Роль: 🗡️ Игрок
+                    </h2>
+                    <button
+                        onclick="backToRoleSelection()"
+                        class="text-stone-600 hover:text-stone-900 font-semibold underline"
+                    >
+                        Назад
+                    </button>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <button
+                        onclick="createCharacter()"
+                        class="bg-gradient-to-r from-emerald-700 to-emerald-800 text-amber-50 font-semibold text-lg py-3 px-6 rounded-lg border-4 border-emerald-900 shadow-lg hover:from-emerald-600 hover:to-emerald-700 hover:scale-105 transform transition-all duration-200"
+                        style="font-family: 'Cinzel', serif;"
+                    >
+                        ➕ Создать нового персонажа
+                    </button>
+
+                    <button
+                        onclick="deleteCharacter()"
+                        class="bg-gradient-to-r from-red-700 to-red-800 text-amber-50 font-semibold text-lg py-3 px-6 rounded-lg border-4 border-red-900 shadow-lg hover:from-red-600 hover:to-red-700 hover:scale-105 transform transition-all duration-200"
+                        style="font-family: 'Cinzel', serif;"
+                    >
+                        🗑️ Удалить персонажа
+                    </button>
+
+                    <button
+                        onclick="joinLobby()"
+                        class="bg-gradient-to-r from-indigo-700 to-indigo-800 text-amber-50 font-semibold text-lg py-3 px-6 rounded-lg border-4 border-indigo-900 shadow-lg hover:from-indigo-600 hover:to-indigo-700 hover:scale-105 transform transition-all duration-200"
+                        style="font-family: 'Cinzel', serif;"
+                    >
+                        🚪 Подключиться к лобби
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Декоративный текст внизу -->
+        <p class="text-center text-amber-300 mt-6 text-sm italic" style="font-family: 'IM Fell English', serif;">
+            Да начнётся великое приключение...
+        </p>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/role-select.js"></script>
+</body>
+</html>

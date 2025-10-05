@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D Application - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="scroll-container">
+        <div class="scroll-rod scroll-rod-top"></div>
+        
+        <div class="parchment p-8 md:p-12 relative">
+            <svg class="decorative-flourish flourish-tl" viewBox="0 0 100 100" fill="#8b5a2b">
+                <path d="M10,50 Q30,30 50,50 T90,50 M50,10 Q30,30 50,50 T50,90"/>
+            </svg>
+            <svg class="decorative-flourish flourish-tr" viewBox="0 0 100 100" fill="#8b5a2b">
+                <path d="M10,50 Q30,30 50,50 T90,50 M50,10 Q30,30 50,50 T50,90"/>
+            </svg>
+        
+            <div class="relative z-10">
+                <div class="text-center mb-8">
+                    <svg class="w-16 h-16 mx-auto mb-4 shield-icon" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
+                    </svg>
+                    <h1 class="medieval-title text-4xl md:text-5xl mb-2">D&D Application</h1>
+                    <p class="text-amber-900 text-sm">Enter the Realm of Adventure</p>
+                </div>
+                
+                <!-- Сообщения об ошибках/успехе -->
+                <div id="messageContainer" class="mb-4 hidden">
+                    <div id="messageBox" class="p-4 rounded border-2"></div>
+                </div>
+                
+                <div class="flex justify-center mb-8 border-b-2 border-amber-900 border-opacity-20">
+                    <button class="tab-button active" onclick="showTab('login')">Вход</button>
+                    <button class="tab-button" onclick="showTab('register')">Регистрация</button>
+                </div>
+                
+                <!-- Форма входа -->
+                <form id="loginForm" class="space-y-6">
+                    <div>
+                        <label class="block text-amber-900 font-semibold mb-2 text-sm">Имя персонажа</label>
+                        <input type="text" id="loginUsername" class="medieval-input w-full px-4 py-3 rounded" placeholder="Введите имя" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-amber-900 font-semibold mb-2 text-sm">Секретная фраза</label>
+                        <input type="password" id="loginPassword" class="medieval-input w-full px-4 py-3 rounded" placeholder="Введите пароль" required>
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <input type="checkbox" id="remember" class="w-4 h-4 mr-2">
+                        <label for="remember" class="text-sm text-amber-900">Запомнить меня</label>
+                    </div>
+                    
+                    <button type="submit" class="medieval-button w-full py-3 rounded">
+                        Войти в королевство
+                    </button>
+                </form>
+                
+                <!-- Форма регистрации -->
+                <form id="registerForm" class="space-y-6 hidden">
+                    <div>
+                        <label class="block text-amber-900 font-semibold mb-2 text-sm">Имя персонажа</label>
+                        <input type="text" id="registerUsername" class="medieval-input w-full px-4 py-3 rounded" placeholder="Выберите имя" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-amber-900 font-semibold mb-2 text-sm">Почтовый ворон</label>
+                        <input type="email" id="registerEmail" class="medieval-input w-full px-4 py-3 rounded" placeholder="your@email.com" required>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-amber-900 font-semibold mb-2 text-sm">Секретная фраза</label>
+                        <input type="password" id="registerPassword" class="medieval-input w-full px-4 py-3 rounded" placeholder="Создайте пароль" required>
+                        <p class="text-xs text-amber-800 mt-1 opacity-75">Минимум 8 символов, включая цифры, заглавные и строчные буквы</p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-amber-900 font-semibold mb-2 text-sm">Подтвердите фразу</label>
+                        <input type="password" id="registerPasswordConfirm" class="medieval-input w-full px-4 py-3 rounded" placeholder="Повторите пароль" required>
+                    </div>
+                    
+                    <div class="flex items-start">
+                        <input type="checkbox" id="terms" class="w-4 h-4 mr-2 mt-1" required>
+                        <label for="terms" class="text-sm text-amber-900">Я клянусь соблюдать Кодекс Искателя Приключений</label>
+                    </div>
+                    
+                    <button type="submit" class="medieval-button w-full py-3 rounded">
+                        Присоединиться к приключению
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="scroll-rod scroll-rod-bottom"></div>
+    </div>
+    
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

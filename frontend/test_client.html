@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D Socket.IO Test Client</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .panel {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .panel h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        
+        .status.connected {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status.disconnected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .messages {
+            height: 400px;
+            overflow-y: auto;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .message {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .message.system {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+        }
+        
+        .message.chat {
+            background: #f0f0f0;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .message.dice {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+        
+        .message-time {
+            font-size: 0.8em;
+            color: #666;
+            margin-left: 10px;
+        }
+        
+        .dice-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .dice-btn {
+            padding: 10px;
+            background: #ffc107;
+            color: #333;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .dice-btn:hover {
+            background: #ffca28;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎲 D&D Socket.IO Test Client</h1>
+            <p>Тестовый клиент для проверки Socket.IO соединения</p>
+        </div>
+        
+        <div class="content">
+            <!-- Левая панель: Управление -->
+            <div class="panel">
+                <h2>⚙️ Управление</h2>
+                
+                <div id="status" class="status disconnected">
+                    ❌ Не подключено
+                </div>
+                
+                <div class="form-group">
+                    <label for="token">JWT Token:</label>
+                    <textarea id="token" rows="3" placeholder="Вставьте JWT токен сюда"></textarea>
+                </div>
+                
+                <button id="connectBtn" onclick="connect()">🔌 Подключиться</button>
+                <button id="disconnectBtn" onclick="disconnect()" disabled>🔌 Отключиться</button>
+                
+                <hr style="margin: 20px 0; border: none; border-top: 2px solid #ddd;">
+                
+                <div class="form-group">
+                    <label for="roomId">ID Комнаты:</label>
+                    <input type="text" id="roomId" placeholder="test_room_1" value="test_room_1">
+                </div>
+                
+                <button onclick="joinRoom()">🚪 Войти в комнату</button>
+                <button onclick="leaveRoom()">🚪 Выйти из комнаты</button>
+                
+                <hr style="margin: 20px 0; border: none; border-top: 2px solid #ddd;">
+                
+                <h3 style="margin-bottom: 10px;">🎲 Броски кубиков</h3>
+                <div class="dice-buttons">
+                    <button class="dice-btn" onclick="rollDice('d4')">D4</button>
+                    <button class="dice-btn" onclick="rollDice('d6')">D6</button>
+                    <button class="dice-btn" onclick="rollDice('d8')">D8</button>
+                    <button class="dice-btn" onclick="rollDice('d10')">D10</button>
+                    <button class="dice-btn" onclick="rollDice('d12')">D12</button>
+                    <button class="dice-btn" onclick="rollDice('d20')">D20</button>
+                    <button class="dice-btn" onclick="rollDice('d100')">D100</button>
+                </div>
+                
+                <button onclick="getOnlineUsers()" style="margin-top: 20px;">👥 Онлайн пользователи</button>
+            </div>
+            
+            <!-- Правая панель: Чат -->
+            <div class="panel">
+                <h2>💬 Чат</h2>
+                
+                <div id="messages" class="messages"></div>
+                
+                <div class="form-group">
+                    <input type="text" id="messageInput" placeholder="Введите сообщение..." onkeypress="if(event.key==='Enter') sendMessage()">
+                </div>
+                
+                <button onclick="sendMessage()">📤 Отправить</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let socket = null;
+        let isConnected = false;
+        
+        function addMessage(text, type = 'system') {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            const time = new Date().toLocaleTimeString();
+            messageDiv.innerHTML = `${text}<span class="message-time">${time}</span>`;
+            
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+        
+        function updateStatus(connected) {
+            isConnected = connected;
+            const statusDiv = document.getElementById('status');
+            const connectBtn = document.getElementById('connectBtn');
+            const disconnectBtn = document.getElementById('disconnectBtn');
+            
+            if (connected) {
+                statusDiv.className = 'status connected';
+                statusDiv.textContent = '✅ Подключено';
+                connectBtn.disabled = true;
+                disconnectBtn.disabled = false;
+            } else {
+                statusDiv.className = 'status disconnected';
+                statusDiv.textContent = '❌ Не подключено';
+                connectBtn.disabled = false;
+                disconnectBtn.disabled = true;
+            }
+        }
+        
+        function connect() {
+            const token = document.getElementById('token').value.trim();
+            
+            if (!token) {
+                addMessage('❌ Ошибка: Укажите JWT токен!', 'error');
+                return;
+            }
+            
+            addMessage('🔌 Подключение к серверу...', 'system');
+            
+            socket = io('http://localhost:8000', {
+                auth: { token: token },
+                transports: ['websocket']
+            });
+            
+            socket.on('connect', () => {
+                addMessage('✅ Успешно подключено к серверу!', 'system');
+                updateStatus(true);
+            });
+            
+            socket.on('disconnect', () => {
+                addMessage('❌ Отключено от сервера', 'system');
+                updateStatus(false);
+            });
+            
+            socket.on('connected', (data) => {
+                addMessage(`📨 ${data.message}`, 'system');
+            });
+            
+            socket.on('user_joined', (data) => {
+                addMessage(`👤 ${data.username} присоединился`, 'system');
+            });
+            
+            socket.on('user_left', (data) => {
+                addMessage(`👤 ${data.username} вышел`, 'system');
+            });
+            
+            socket.on('user_joined_room', (data) => {
+                addMessage(`🚪 ${data.username} присоединился к комнате ${data.room_id}`, 'system');
+            });
+            
+            socket.on('user_left_room', (data) => {
+                addMessage(`🚪 ${data.username} покинул комнату ${data.room_id}`, 'system');
+            });
+            
+            socket.on('chat_message', (data) => {
+                addMessage(`💬 <strong>${data.username}</strong>: ${data.message}`, 'chat');
+            });
+            
+            socket.on('dice_rolled', (data) => {
+                addMessage(`🎲 <strong>${data.username}</strong> бросил ${data.dice_type}: <strong>${data.result}</strong>`, 'dice');
+            });
+            
+            socket.on('connect_error', (error) => {
+                addMessage(`❌ Ошибка подключения: ${error.message}`, 'error');
+                updateStatus(false);
+            });
+        }
+        
+        function disconnect() {
+            if (socket) {
+                socket.disconnect();
+                socket = null;
+                addMessage('🔌 Отключение от сервера...', 'system');
+            }
+        }
+        
+        function joinRoom() {
+            if (!isConnected) {
+                addMessage('❌ Сначала подключитесь к серверу!', 'error');
+                return;
+            }
+            
+            const roomId = document.getElementById('roomId').value.trim();
+            if (!roomId) {
+                addMessage('❌ Укажите ID комнаты!', 'error');
+                return;
+            }
+            
+            socket.emit('join_room', { room_id: roomId }, (response) => {
+                if (response.error) {
+                    addMessage(`❌ Ошибка: ${response.error}`, 'error');
+                } else {
+                    addMessage(`✅ Вы присоединились к комнате ${roomId}`, 'system');
+                }
+            });
+        }
+        
+        function leaveRoom() {
+            if (!isConnected) {
+                addMessage('❌ Сначала подключитесь к серверу!', 'error');
+                return;
+            }
+            
+            const roomId = document.getElementById('roomId').value.trim();
+            if (!roomId) {
+                addMessage('❌ Укажите ID комнаты!', 'error');
+                return;
+            }
+            
+            socket.emit('leave_room', { room_id: roomId }, (response) => {
+                if (response.error) {
+                    addMessage(`❌ Ошибка: ${response.error}`, 'error');
+                } else {
+                    addMessage(`✅ Вы покинули комнату ${roomId}`, 'system');
+                }
+            });
+        }
+        
+        function sendMessage() {
+            if (!isConnected) {
+                addMessage('❌ Сначала подключитесь к серверу!', 'error');
+                return;
+            }
+            
+            const messageInput = document.getElementById('messageInput');
+            const message = messageInput.value.trim();
+            
+            if (!message) {
+                return;
+            }
+            
+            const roomId = document.getElementById('roomId').value.trim();
+            
+            socket.emit('send_message', {
+                room_id: roomId,
+                message: message,
+                timestamp: Date.now()
+            }, (response) => {
+                if (response.error) {
+                    addMessage(`❌ Ошибка: ${response.error}`, 'error');
+                }
+            });
+            
+            messageInput.value = '';
+        }
+        
+        function rollDice(diceType) {
+            if (!isConnected) {
+                addMessage('❌ Сначала подключитесь к серверу!', 'error');
+                return;
+            }
+            
+            const max = parseInt(diceType.substring(1));
+            const result = Math.floor(Math.random() * max) + 1;
+            const roomId = document.getElementById('roomId').value.trim();
+            
+            socket.emit('dice_roll', {
+                room_id: roomId,
+                dice_type: diceType,
+                result: result,
+                timestamp: Date.now()
+            }, (response) => {
+                if (response.error) {
+                    addMessage(`❌ Ошибка: ${response.error}`, 'error');
+                }
+            });
+        }
+        
+        function getOnlineUsers() {
+            if (!isConnected) {
+                addMessage('❌ Сначала подключитесь к серверу!', 'error');
+                return;
+            }
+            
+            const roomId = document.getElementById('roomId').value.trim();
+            
+            socket.emit('get_online_users', { room_id: roomId }, (response) => {
+                if (response.error) {
+                    addMessage(`❌ Ошибка: ${response.error}`, 'error');
+                } else {
+                    const users = response.users.map(u => u.username).join(', ');
+                    addMessage(`👥 Онлайн (${response.count}): ${users || 'никого'}`, 'system');
+                }
+            });
+        }
+        
+        // Приветственное сообщение
+        addMessage('👋 Добро пожаловать! Введите JWT токен и нажмите "Подключиться"', 'system');
+    </script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+/* D&D Application - Medieval Styles */
+
+body {
+    font-family: 'IM Fell English', serif;
+    background: linear-gradient(135deg, #1a1410 0%, #2d1f16 50%, #1a1410 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+}
+
+.scroll-container {
+    position: relative;
+    max-width: 500px;
+    width: 100%;
+}
+
+.scroll-rod {
+    position: absolute;
+    width: 100%;
+    height: 30px;
+    background: linear-gradient(to right, #3d2817 0%, #5d3a1a 20%, #5d3a1a 80%, #3d2817 100%);
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.6), inset 0 2px 4px rgba(0,0,0,0.3);
+    z-index: 20;
+}
+
+.scroll-rod::before,
+.scroll-rod::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 100%;
+    background: linear-gradient(to bottom, #2d1f16 0%, #1a1410 50%, #2d1f16 100%);
+    border-radius: 10px;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+}
+
+.scroll-rod::before {
+    left: -10px;
+}
+
+.scroll-rod::after {
+    right: -10px;
+}
+
+.scroll-rod-top {
+    top: -15px;
+}
+
+.scroll-rod-bottom {
+    bottom: -15px;
+}
+
+.parchment {
+    background: linear-gradient(to bottom, #f4e8d0 0%, #e8d7b8 50%, #f4e8d0 100%);
+    box-shadow: 
+        0 0 60px rgba(0,0,0,0.5),
+        inset 0 0 100px rgba(139,90,43,0.1),
+        inset 0 15px 30px rgba(139,90,43,0.15),
+        inset 0 -15px 30px rgba(139,90,43,0.15);
+    position: relative;
+    border-radius: 0;
+    margin: 15px 0;
+}
+
+.parchment::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(139,90,43,0.03) 2px,
+            rgba(139,90,43,0.03) 4px
+        );
+    pointer-events: none;
+}
+
+.medieval-title {
+    font-family: 'Cinzel', serif;
+    color: #5d3a1a;
+    text-shadow: 2px 2px 0px rgba(212,175,55,0.3);
+    letter-spacing: 0.05em;
+}
+
+.medieval-input {
+    background: rgba(255,255,255,0.6);
+    border: 2px solid #8b5a2b;
+    font-family: 'IM Fell English', serif;
+    transition: all 0.3s ease;
+}
+
+.medieval-input:focus {
+    outline: none;
+    border-color: #d4af37;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(212,175,55,0.3);
+}
+
+.medieval-button {
+    background: linear-gradient(to bottom, #8b5a2b 0%, #5d3a1a 100%);
+    border: 3px solid #d4af37;
+    color: #f4e8d0;
+    font-family: 'Cinzel', serif;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    cursor: pointer;
+}
+
+.medieval-button:hover {
+    background: linear-gradient(to bottom, #a0692f 0%, #6d4422 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(212,175,55,0.4);
+}
+
+.medieval-button:active {
+    transform: translateY(0);
+}
+
+.medieval-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.decorative-flourish {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+.flourish-tl {
+    top: 30px;
+    left: 20px;
+}
+
+.flourish-tr {
+    top: 30px;
+    right: 20px;
+    transform: scaleX(-1);
+}
+
+.tab-button {
+    font-family: 'Cinzel', serif;
+    color: #8b5a2b;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    padding: 12px 24px;
+    background: none;
+    cursor: pointer;
+}
+
+.tab-button:hover {
+    color: #5d3a1a;
+}
+
+.tab-button.active {
+    color: #5d3a1a;
+    border-bottom-color: #d4af37;
+    font-weight: 600;
+}
+
+.shield-icon {
+    color: #d4af37;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+/* Сообщения */
+.message-success {
+    background: rgba(34, 197, 94, 0.1);
+    border-color: #22c55e;
+    color: #166534;
+}
+
+.message-error {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: #ef4444;
+    color: #991b1b;
+}
+
+.message-info {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: #3b82f6;
+    color: #1e40af;
+}
+
+/* Адаптивность */
+@media (max-width: 640px) {
+    body {
+        padding: 40px 10px;
+    }
+    
+    .decorative-flourish {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .flourish-tl {
+        top: 20px;
+        left: 10px;
+    }
+    
+    .flourish-tr {
+        top: 20px;
+        right: 10px;
+    }
+}
+
+/* Анимация загрузки */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading {
+    animation: spin 1s linear infinite;
+}
